@@ -107,6 +107,8 @@ def test1(trial,k,n,train_flag,n_teams):
             #controller.put("hist",controller.hist)
             
             folder="tests/"+str(k)+"-"+str(n)+"-"+str(trial)+"-"+str(train_flag)
+            if not os.path.exists("tests"):
+                os.makedirs("tests")
             if not os.path.exists(folder):
                 os.makedirs(folder)
             controller.save(folder+"/"+str(i)+".pkl")

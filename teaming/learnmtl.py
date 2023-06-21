@@ -30,7 +30,7 @@ def comb(n, r):
 
 
 class Net():
-    def __init__(self,hidden=20*4):#*4
+    def __init__(self,hidden=20):#*4
         learning_rate=5e-3
         self.model = torch.nn.Sequential(
             torch.nn.Linear(8, hidden),
@@ -211,7 +211,7 @@ class learner:
         self.log.save(fname)
         #print(self.Dapprox[0].model.state_dict()['4.bias'].is_cuda)
         netinfo={i:self.Dapprox[i].model.state_dict() for i in range(len(self.Dapprox))}
-        torch.save(netinfo,fname+".mdl")
+        torch.save(netinfo,fname[:-4]+".mdl")
 
     #train_flag=0 - D
     #train_flag=1 - Neural Net Approx of D
