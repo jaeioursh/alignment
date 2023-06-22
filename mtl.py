@@ -10,6 +10,8 @@ import multiprocessing as mp
 
 
 from rover_domain_core_gym import RoverDomainGym
+import pyximport
+pyximport.install()
 import code.ccea_2 as ccea
 import code.agent_domain_2 as domain
 

@@ -19,12 +19,13 @@ RoverDomainGym should be mods
 
 from core import SimulationCore
 import pyximport
+pyximport.install() 
 import code.world_setup as world_setup  # Rover Domain Construction
 import code.agent_domain_2 as rover_domain  # Rover Domain Dynamic
 import code.reward_2 as rewards  # Agent Reward and Performance Recording
 from code.trajectory_history import *  # Record trajectory of agents for calculating rewards
 
-pyximport.install()  # For cython(pyx) code
+ # For cython(pyx) code
 
 import matplotlib.pyplot as plt
 
