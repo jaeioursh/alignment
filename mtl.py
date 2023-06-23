@@ -143,7 +143,7 @@ if __name__=="__main__":
             n=4
             for k,n in [[5,4]]:
                 teams=100
-                for i in range(1):
+                for i in range(8):
                     
                     p=mp.Process(target=test1,args=(i,k,n,train,teams))
                     p.start()
