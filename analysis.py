@@ -1,7 +1,7 @@
 from alignment import load_data,eval
 import numpy as np
 
-sample_size = 100
+sample_size = 5000
 Reward_Data= np.zeros((sample_size,2))
 State_Array= np.zeros((sample_size,3))
 Alignment_Data= np.zeros((sample_size,3))
