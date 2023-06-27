@@ -55,8 +55,6 @@ if __name__=="__main__":
     Sum_Aligned= Alignment_Data[:,0].sum() 
     Percent_Aligned= (Sum_Aligned/sample_size) *100
 
-    print (Sum_Aligned)
-
     print('%', Percent_Aligned)
 
     #Save Data to File
