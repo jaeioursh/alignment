@@ -149,7 +149,7 @@ if __name__=="__main__":
                     p.start()
                     time.sleep(0.05)
                     procs.append(p)
-                    #p.join()
+                    #p.join()git ad
                 for p in procs:
                     p.join()
 
