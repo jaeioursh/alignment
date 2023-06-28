@@ -1,21 +1,24 @@
 from alignment import load_data,eval
 import numpy as np
 
-sample_size = 5000 #Cannot be lower then 100, or else randint fuction freezes
+sample_size = 10000 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
 State_Array= np.zeros((sample_size,3))
 Alignment_Data= np.zeros((sample_size,3))
+count=0
 row_index=0
 index=0
 
 file=open('Analysis.txt', 'w')
 
 #write data to file
-def filewrite (index):
+def filewrite (index,row_index,test_index):
     content=str(Alignment_Data[index,:])
     file.write(content) 
     file.write('\n')    
-    content=str(Reward_Data[index,:])
+    content=str(Reward_Data[row_index,:])
+    file.write(content) 
+    content=str(Reward_Data[test_index,:])
     file.write(content) 
     file.write('\n')    
     content=str(State_Array[index,:])
@@ -25,7 +28,7 @@ def filewrite (index):
 if __name__=="__main__":
     agent_idx=0
     team_idx=0
-    env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=1000)
+    env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=100)
     
     for row_index in range (sample_size):
         x=np.random.uniform(-5,35) # -5 to 35 ish
@@ -39,8 +42,6 @@ if __name__=="__main__":
         Reward_Data[row_index,0] = G
         Reward_Data[row_index,1] = G_estimate
         
-    Reward_Data[9,0]=2
-    
     while index < sample_size:
         test_index=np.random.randint(0,sample_size-1)
         row_index=np.random.randint(0,sample_size-1)
@@ -50,24 +51,29 @@ if __name__=="__main__":
         while G1==G2:
             test_index=np.random.randint(0,sample_size-1)
             G2 = Reward_Data[test_index,0]
+            if count==sample_size:
+                print ("Neutral Alignment for", row_index, test_index)
+                break
 
-        GE1 = Reward_Data[row_index,1]
-        GE2 = Reward_Data[test_index,1]
+            count=count+1
+            
+        if count != sample_size:
+            GE1 = Reward_Data[row_index,1]
+            GE2 = Reward_Data[test_index,1]
 
-        aligned= (GE1 - GE2)*(G1 - G2)
-        if aligned > 0:
-            Alignment_Data[index,0]=1
-        elif aligned < 0:
-            Alignment_Data[index,0]=0
+            aligned= (GE1 - GE2)*(G1 - G2)
+            if aligned > 0:
+                Alignment_Data[index,0]=1
+            elif aligned < 0:
+                Alignment_Data[index,0]=0
 
-        Alignment_Data[index,1]=row_index
-        Alignment_Data[index,2]=test_index
+            Alignment_Data[index,1]=row_index
+            Alignment_Data[index,2]=test_index
 
-        filewrite(index)
+            filewrite(index,row_index,test_index)
 
-        index=index+1
+            index=index+1
 
-    
     #Sum the aligned data and calculate percent aligned
     Sum_Aligned= Alignment_Data[:,0].sum() 
     Percent_Aligned= (Sum_Aligned/sample_size) *100
