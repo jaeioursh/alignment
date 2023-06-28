@@ -1,16 +1,26 @@
 from alignment import load_data,eval
 import numpy as np
 
-sample_size = 10
+sample_size = 100 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
 State_Array= np.zeros((sample_size,3))
 Alignment_Data= np.zeros((sample_size,3))
 row_index=0
 index=0
-rfile = open("Rewards.txt", "w+")
-afile = open("Alignment-Calc.txt", "w+")
-pfile = open("Position.txt", "w+")
 
+file=open('Analysis.txt', 'w')
+
+#write data to file
+def filewrite (index):
+    content=str(Alignment_Data[index,:])
+    file.write(content) 
+    file.write('\n')    
+    content=str(Reward_Data[index,:])
+    file.write(content) 
+    file.write('\n')    
+    content=str(State_Array[index,:])
+    file.write(content) 
+    file.write('\n\n') 
 
 if __name__=="__main__":
     agent_idx=0
@@ -53,24 +63,13 @@ if __name__=="__main__":
         Alignment_Data[index,1]=row_index
         Alignment_Data[index,2]=test_index
 
-        for i in range (sample_size-1):
-            pcontent = str(State_Array[i,:])
-            pfile.write(pcontent)
-            acontent = str(Alignment_Data[i,:])
-            afile.write(acontent)
-            rcontent = str(Reward_Data[i,:])
-            rfile.write(rcontent)
-
-
+        filewrite(index)
 
         index=index+1
+
     
     #Sum the aligned data and calculate percent aligned
     Sum_Aligned= Alignment_Data[:,0].sum() 
     Percent_Aligned= (Sum_Aligned/sample_size) *100
 
     print('%', Percent_Aligned)
-
-    rfile.close()
-    afile.close()
-    pfile.close()
