@@ -1,33 +1,28 @@
 from alignment import load_data,eval
 import numpy as np
+import pickle
 
 sample_size = 10000 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
 State_Array= np.zeros((sample_size,3))
 Alignment_Data= np.zeros((sample_size,3))
+Calc= np.zeros((sample_size,2))
 count=0
 row_index=0
 index=0
 
-file=open('Analysis.txt', 'w')
+file=open('SSAnalysis', 'wb')
 
 #write data to file
 def filewrite (index,row_index,test_index):
-    content=str(Alignment_Data[index,:])
-    file.write(content) 
-    file.write('\n')    
-    content=str(Reward_Data[row_index,:])
-    file.write(content) 
-    content=str(Reward_Data[test_index,:])
-    file.write(content) 
-    file.write('\n')    
-    content=str(State_Array[index,:])
-    file.write(content) 
-    file.write('\n\n') 
+    pickle.dump(Alignment_Data[index,:],file)
+    pickle.dump(Reward_Data[row_index,:],file)
+    pickle.dump(Reward_Data[test_index,:])
+    pickle.dump(State_Array[index,:],file)
 
 if __name__=="__main__":
-    agent_idx=0
-    team_idx=0
+    agent_idx=0 #which agent
+    team_idx=0 #which team
     env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=100)
     
     for row_index in range (sample_size):
@@ -43,18 +38,16 @@ if __name__=="__main__":
         Reward_Data[row_index,1] = G_estimate
         
     while index < sample_size:
-        test_index=np.random.randint(0,sample_size-1)
-        row_index=np.random.randint(0,sample_size-1)
+        test_index=np.random.randint(0,(sample_size-1))
+        row_index=np.random.randint(0,(sample_size-1))
         G1 = Reward_Data[row_index,0]
         G2 = Reward_Data[test_index,0]
         
         while G1==G2:
             test_index=np.random.randint(0,sample_size-1)
             G2 = Reward_Data[test_index,0]
-            if count==sample_size:
-                print ("Neutral Alignment for", row_index, test_index)
+            if count==(sample_size-1):
                 break
-
             count=count+1
             
         if count != sample_size:
@@ -62,20 +55,31 @@ if __name__=="__main__":
             GE2 = Reward_Data[test_index,1]
 
             aligned= (GE1 - GE2)*(G1 - G2)
+            if aligned in Calc:
+                break
+                
             if aligned > 0:
                 Alignment_Data[index,0]=1
             elif aligned < 0:
                 Alignment_Data[index,0]=0
 
+            Calc[index]=aligned
             Alignment_Data[index,1]=row_index
             Alignment_Data[index,2]=test_index
 
-            filewrite(index,row_index,test_index)
+            #filewrite(index,row_index,test_index)
+
+            #pickle.dump(Alignment_Data[index,:],file)
 
             index=index+1
 
+    #Write data into pickle file
+    pickle.dump(Alignment_Data,file)
+
     #Sum the aligned data and calculate percent aligned
     Sum_Aligned= Alignment_Data[:,0].sum() 
-    Percent_Aligned= (Sum_Aligned/sample_size) *100
+    Percent_Aligned= (Sum_Aligned/(index+1)) *100
 
     print('%', Percent_Aligned)
+
+    file.close()
