@@ -109,7 +109,7 @@ def plot(agents,team_size,generation, trial,ROWS=1,COLS=1):
 
 agents=5
 team_size=4
-generation=300
+generation=4000
 trial=0
 ROWS=1
 COLS=5
