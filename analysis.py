@@ -13,17 +13,10 @@ index=0
 
 file=open('SSAnalysis', 'wb')
 
-#write data to file
-def filewrite (index,row_index,test_index):
-    pickle.dump(Alignment_Data[index,:],file)
-    pickle.dump(Reward_Data[row_index,:],file)
-    pickle.dump(Reward_Data[test_index,:])
-    pickle.dump(State_Array[index,:],file)
-
 if __name__=="__main__":
     agent_idx=0 #which agent
-    team_idx=0 #which team
-    env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=100)
+    team_idx=2 #which team
+    env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=3000)
     
     for row_index in range (sample_size):
         x=np.random.uniform(-5,35) # -5 to 35 ish
@@ -66,10 +59,6 @@ if __name__=="__main__":
             Calc[index]=aligned
             Alignment_Data[index,1]=row_index
             Alignment_Data[index,2]=test_index
-
-            #filewrite(index,row_index,test_index)
-
-            #pickle.dump(Alignment_Data[index,:],file)
 
             index=index+1
 
