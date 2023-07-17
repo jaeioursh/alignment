@@ -10,17 +10,15 @@ Calc= np.zeros((sample_size,2))
 count=0
 row_index=0
 index=0
-generation=50
 
 file=open('SSAnalysis', 'wb')
 
-for generation in range (4000): 
-
+for j in range (0,4001,50): 
 
     if __name__=="__main__":
-        agent_idx=0 #which agent
+        agent_idx=3 #which agent
         team_idx=2 #which team
-        env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0, generation=generation)
+        env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0, generation=j)
         
         for row_index in range (sample_size):
             x=np.random.uniform(-5,35) # -5 to 35 ish
@@ -74,8 +72,6 @@ for generation in range (4000):
         pickle.dump(Percent_Aligned,file)
 
         print('%', Percent_Aligned)
-
-        generation= generation + 50
 
 file.close()
         
