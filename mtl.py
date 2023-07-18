@@ -102,18 +102,14 @@ def test1(trial,k,n,train_flag,n_teams):
         
             
         if i%50==0:
-            #controller.save("tests/q"+str(frq)+"-"+str(trial)+".pkl")
-            #controller.save("logs/"+str(trial)+"r"+str(16)+".pkl")
-            #controller.save("tests/jj"+str(121)+"-"+str(trial)+".pkl")
-            #controller.log.clear("hist")
-            #controller.put("hist",controller.hist)
+           
             
             folder="tests/"+str(k)+"-"+str(n)+"-"+str(trial)+"-"+str(train_flag)
             if not os.path.exists("tests"):
                 os.makedirs("tests")
             if not os.path.exists(folder):
                 os.makedirs(folder)
-            controller.save(folder+"/"+str(i)+".pkl")
+            controller.save(folder,i)
 
     #train_flag=0 - D
     #train_flag=1 - Neural Net Approx of D

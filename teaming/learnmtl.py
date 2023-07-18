@@ -206,12 +206,12 @@ class learner:
         self.team=[self.every_team[i] for i in self.index]
 
 
-    def save(self,fname="log.pkl"):
+    def save(self,folder,idx):
         print("saved")
-        self.log.save(fname)
+        self.log.save(folder+"/data.pkl")
         #print(self.Dapprox[0].model.state_dict()['4.bias'].is_cuda)
         netinfo={i:self.Dapprox[i].model.state_dict() for i in range(len(self.Dapprox))}
-        torch.save(netinfo,fname[:-4]+".mdl")
+        torch.save(netinfo,folder+"/"+str(idx)+".mdl")
 
     #train_flag=0 - D
     #train_flag=1 - Neural Net Approx of D
@@ -285,7 +285,7 @@ class learner:
 
                 if train_flag==3:
                     p.D=[self.Dapprox[t].feed(np.array(p.S[i])) for i in range(len(p.S))]
-                    self.log.store("ctime",[np.argmax(i) for i in p.D])
+                    #self.log.store("ctime",[np.argmax(i) for i in p.D])
                     p.D=[np.max(i) for i in p.D]
                     #p.D=[(self.Dapprox[t].feed(np.array(p.S[i])))[-1] for i in range(len(p.S))]
                     #print(p.D)
@@ -359,7 +359,7 @@ class learner:
         #
         
 
-        self.log.clear("position")
+        #self.log.clear("position")
         self.log.clear("types")
         
         self.log.clear("poi")
@@ -373,6 +373,7 @@ class learner:
         self.log.store("idxs",self.index)
 
         aprx=[]
+        team_pos=[]
         for i in range(len(teams)):
 
             
@@ -389,12 +390,13 @@ class learner:
             R=[]
             i=0
             self.log.store("types",self.team[0].copy(),i)
-            
+            positions=[[np.array(env.data["Agent Positions"]),np.array(env.data["Agent Orientations"])]]
             while not done:
                 
-                self.log.store("position",np.array(env.data["Agent Positions"]),i)
+                #self.log.store("position",np.array(env.data["Agent Positions"]),i)
                 
                 action=self.act(s,env.data,0)
+                positions.append([np.array(env.data["Agent Positions"]),np.array(env.data["Agent Orientations"])])
                 #action=self.idx2a(env,[1,1,3])
                 #print(action)
                 sp, r, done, info = env.step(action)
@@ -403,13 +405,15 @@ class learner:
                 
                 s=sp
                 i+=1
+            team_pos.append(positions)
             g=env.data["Global Reward"]
             ap=[]
-            for t,State in zip(self.team[0],s):
-                
-                ap.append(self.Dapprox[t].feed(np.array(State)))
-            aprx.append([self.team[0],ap])
+            #for t,State in zip(self.team[0],s):
+            #    
+            #    ap.append(self.Dapprox[t].feed(np.array(State)))
+            #aprx.append([self.team[0],ap])
             Rs.append(g)
+        self.log.store("position",team_pos)
         self.log.store("aprx",aprx)
         self.log.store("test",Rs)
         self.aprx=aprx
