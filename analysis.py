@@ -4,7 +4,7 @@ import pickle
 
 sample_size = 10000 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
-State_Array= np.zeros((sample_size,3))
+Percent_Aligned_arr= np.zeros((80,1))
 Alignment_Data= np.zeros((sample_size,3))
 Calc= np.zeros((sample_size,2))
 count=0
@@ -26,9 +26,6 @@ for j in range (0,4001,50):
             t=np.random.uniform(-np.pi,np.pi) #-pi to pi
             state,G = eval(x,y,t,team_idx,agent_idx,env,pos,teams)
             G_estimate=net.feed(state)[0,0]
-            State_Array[row_index,0]=x
-            State_Array[row_index,1]=y
-            State_Array[row_index,2]=t
             Reward_Data[row_index,0] = G
             Reward_Data[row_index,1] = G_estimate
             
@@ -68,10 +65,15 @@ for j in range (0,4001,50):
         Sum_Aligned= Alignment_Data[:,0].sum() 
         Percent_Aligned= (Sum_Aligned/(index+1)) *100
 
-        #Write data into pickle file
-        pickle.dump(Percent_Aligned,file)
-
         print('%', Percent_Aligned)
+    
+    i = (j//50) - 1
+    Percent_Aligned_arr [i]= Percent_Aligned
+
+print (Percent_Aligned_arr)
+
+#Write data into pickle file
+#pickle.dump(Percent_Aligned_arr[:],file)
 
 file.close()
         
