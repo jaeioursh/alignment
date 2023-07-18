@@ -22,7 +22,7 @@ def plot(agents,team_size,generation, trial,ROWS=1,COLS=1):
  
 
     q=3
-    fname="tests/"+str(agents)+"-"+str(team_size)+"-"+str(trial)+"-"+str(q)+"/"+str(generation)
+    fname="tests/"+str(agents)+"-"+str(team_size)+"-"+str(trial)+"-"+str(q)+"/data"
 
     log = logger.logger()
     log.load(fname+".pkl")
@@ -63,9 +63,9 @@ def plot(agents,team_size,generation, trial,ROWS=1,COLS=1):
 
         for i in range(nagents):
             data=[]
-            for j in range(len(pos)):
+            for j in range(len(pos[generation][idx])):
                 #print(np.array(pos).shape)
-                p=pos[j][idx][i]
+                p=pos[generation][idx][j][0][i]
                 data.append(p)
             data=np.array(data).T
             x,y=data
@@ -109,7 +109,7 @@ def plot(agents,team_size,generation, trial,ROWS=1,COLS=1):
 
 agents=5
 team_size=4
-generation=4000
+generation=0
 trial=0
 ROWS=1
 COLS=5

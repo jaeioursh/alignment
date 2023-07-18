@@ -33,7 +33,7 @@ def plot(agents,team_size,generation, trials):
             rmin,rmax=12,18
         '''
         for i in trials:
-            fname="tests/"+str(agents)+"-"+str(team_size)+"-"+str(i)+"-"+str(q)+"/"+str(generation)
+            fname="tests/"+str(agents)+"-"+str(team_size)+"-"+str(i)+"-"+str(q)+"/data"
 
             log = logger.logger()
             log.load(fname+".pkl")

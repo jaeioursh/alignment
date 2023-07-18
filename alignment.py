@@ -50,7 +50,7 @@ def eval(x,y,t,team_idx,agent_idx,env,position,teams,generation,time=-1):
 if __name__=="__main__":
     agent_idx=0
     team_idx=0
-    generation=50
+    generation=0
     env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=generation)
     x=0 # -5 to 35 ish
     y=0 # -5 to 35 ish
