@@ -4,7 +4,7 @@ import pickle
 
 sample_size = 10000 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
-Percent_Aligned_arr= np.zeros((80,1))
+Percent_Aligned_arr= np.zeros((81,1))
 Alignment_Data= np.zeros((sample_size,3))
 Calc= np.zeros((sample_size,2))
 count=0
@@ -16,7 +16,7 @@ file=open('SSAnalysis', 'wb')
 for j in range (0,4001,50): 
 
     if __name__=="__main__":
-        agent_idx=3 #which agent
+        agent_idx=0 #which agent
         team_idx=2 #which team
         env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0, generation=j)
         
@@ -67,13 +67,11 @@ for j in range (0,4001,50):
 
         print('%', Percent_Aligned)
     
-    i = (j//50) - 1
+    i = (j//50)
     Percent_Aligned_arr [i]= Percent_Aligned
 
-print (Percent_Aligned_arr)
-
 #Write data into pickle file
-#pickle.dump(Percent_Aligned_arr[:],file)
+pickle.dump(Percent_Aligned_arr,file)
 
 file.close()
         
