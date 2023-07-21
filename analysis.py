@@ -8,23 +8,22 @@ Percent_Aligned_arr= np.zeros((81,1))
 Alignment_Data= np.zeros((sample_size,3))
 Calc= np.zeros((sample_size,2))
 count=0
-row_index=0
 index=0
-
-file=open('SSAnalysis', 'wb')
 
 for j in range (0,4001,50): 
 
     if __name__=="__main__":
-        agent_idx=0 #which agent
-        team_idx=2 #which team
+        agent_idx=3 #which agent
+        team_idx=0 #which team
         env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0, generation=j)
+
+        file=open('SSAnalysis' + str(agent_idx) + str(team_idx), 'wb')
         
-        for row_index in range (sample_size):
+        for row_index in range (0,sample_size):
             x=np.random.uniform(-5,35) # -5 to 35 ish
             y=np.random.uniform(-5,35) # -5 to 35 ish
             t=np.random.uniform(-np.pi,np.pi) #-pi to pi
-            state,G = eval(x,y,t,team_idx,agent_idx,env,pos,teams)
+            state,G = eval(x,y,t,team_idx,agent_idx,env,pos,teams,generation=j)
             G_estimate=net.feed(state)[0,0]
             Reward_Data[row_index,0] = G
             Reward_Data[row_index,1] = G_estimate
