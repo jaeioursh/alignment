@@ -26,16 +26,17 @@ file=open('SSAnalysis' + str(agent_idx4) + str(team_idx), 'rb')
 data4=pickle.load(file)
 file.close()
 
-gen=np.zeros((1,81))
+gen=np.zeros(81)
+
 
 for i in range(0,81,1):
-    gen[0,i]=i*50
+    gen[i]=i*50
 
-x = gen [0,:]
+x = gen
 
-plt.plot(x, data1, color='tab:green', label = 'Agent' + ' ' + str(agent_idx1))
-plt.plot(x, data2, color='tab:red', label = 'Agent' + ' ' + str(agent_idx2))
-plt.plot(x, data3, color='tab:blue', label = 'Agent' + ' ' + str(agent_idx3))
+plt.plot(x, data1, color='green', label = 'Agent' + ' ' + str(agent_idx1))
+plt.plot(x, data2, color='red', label = 'Agent' + ' ' + str(agent_idx2))
+plt.plot(x, data3, color='blue', label = 'Agent' + ' ' + str(agent_idx3))
 plt.plot(x, data4, color='tab:orange', label = 'Agent' + ' ' + str(agent_idx4))
 
 plt.ylim([0,100])
@@ -44,4 +45,9 @@ plt.legend(loc='upper left')
 plt.xlabel("Generation")
 plt.ylabel("Percent Alignment")
 plt.title("Percent Alignment for Team 0")
-plt.show()
+#plt.show()
+
+print (data1[60])
+print (data2[60])
+print (data3[60])
+print (data4[60])
