@@ -12,7 +12,7 @@ team_idx= 1
 
 agent_idx1=0
 agent_idx2=1
-agent_idx3=3
+agent_idx3=2
 agent_idx4=4
 
 file=open('SSAnalysis' + str(agent_idx1) + str(team_idx), 'rb')   
