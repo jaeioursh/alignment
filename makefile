@@ -31,6 +31,6 @@ video:
 	ffmpeg -r 12 -i ims/test%d.png -c:v libx264 -vf fps=12 -pix_fmt yuv420p out.mp4
 
 full_make:
-	cd code && make
+	cd code1 && make
 	
 
