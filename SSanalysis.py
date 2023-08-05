@@ -84,4 +84,12 @@ for cidx in range (0,4):
 
     #Write data into pickle file
     save(team_idx,agent_idx,Percent_Aligned_arr)
+
+    #reset arrays
+    Reward_Data= np.zeros((sample_size,2))
+    Percent_Aligned_arr= np.zeros((81,1))
+    Alignment_Data= np.zeros((sample_size,3))
+    Calc= np.zeros((sample_size,2))
+    count=0
+    index=0
             
