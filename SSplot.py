@@ -8,12 +8,14 @@ import matplotlib.pyplot as plt
     #for z in range (0,4):
         #agent_idx=tna[team_idx,z]
 
-team_idx= 0
+tna=np.array ([[0,1,2,3],[0,1,2,4],[0,1,3,4],[0,2,3,4],[1,2,3,4]])
 
-agent_idx1=0
-agent_idx2=1
-agent_idx3=2
-agent_idx4=3
+team_idx= 4
+
+agent_idx1= tna[team_idx,0]
+agent_idx2= tna[team_idx,1]
+agent_idx3= tna[team_idx,2]
+agent_idx4= tna[team_idx,3]
 
 filepath = r"SS/"+str(team_idx)+"-"+str(agent_idx1)+'.pkl'
 file=open(filepath, 'rb')
