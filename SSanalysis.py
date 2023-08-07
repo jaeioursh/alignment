@@ -19,7 +19,7 @@ def save (team_idx, agent_idx,Percent_Aligned_arr):
 
 sample_size = 10000 #Cannot be lower then 100, or else randint fuction freezes
 Reward_Data= np.zeros((sample_size,2))
-Percent_Aligned_arr= np.zeros((81,1))
+Percent_Aligned_arr= np.zeros((4001,1))
 Alignment_Data= np.zeros((sample_size,3))
 Calc= np.zeros((sample_size,2))
 count=0
@@ -32,16 +32,17 @@ for team_idx in range (0,5):
 #Cycle through team indexes
     for cidx in range (0,4):
         agent_idx= tna[team_idx,cidx]
-        print(agent_idx)
+        print(agent_idx,team_idx)
         for j in range (0,4001,50):
             if __name__=="__main__":
                 env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0, generation=j)
             
+            for g in range (0,4001):
                 for row_index in range (0,sample_size):
                     x=np.random.uniform(-5,35) # -5 to 35 ish
                     y=np.random.uniform(-5,35) # -5 to 35 ish
                     t=np.random.uniform(-np.pi,np.pi) #-pi to pi
-                    state,G = eval(x,y,t,team_idx,agent_idx,env,pos,teams,generation=j)
+                    state,G = eval(x,y,t,team_idx,agent_idx,env,pos,teams,generation=g)
                     G_estimate=net.feed(state)[0,0]
                     Reward_Data[row_index,0] = G
                     Reward_Data[row_index,1] = G_estimate
@@ -77,23 +78,22 @@ for team_idx in range (0,5):
                         Alignment_Data[index,2]=test_index
 
                         index=index+1
-                #Sum the aligned data and calculate percent aligned
-                Sum_Aligned= Alignment_Data[:,0].sum() 
-                Percent_Aligned= (Sum_Aligned/(index+1)) *100
+            #Sum the aligned data and calculate percent aligned
+            Sum_Aligned= Alignment_Data[:,0].sum() 
+            Percent_Aligned= (Sum_Aligned/(index+1)) *100
 
-                print('%', Percent_Aligned,j)
+            print('%', Percent_Aligned,j)
             
-            i = (j//50)
-            Percent_Aligned_arr [i]= Percent_Aligned
+            Percent_Aligned_arr [g]= Percent_Aligned
 
-        #Write data into pickle file
-        save(team_idx,agent_idx,Percent_Aligned_arr)
+            #Write data into pickle file
+            save(team_idx,agent_idx,Percent_Aligned_arr)
 
-        #reset arrays
-        Reward_Data= np.zeros((sample_size,2))
-        Percent_Aligned_arr= np.zeros((81,1))
-        Alignment_Data= np.zeros((sample_size,3))
-        Calc= np.zeros((sample_size,2))
-        count=0
-        index=0
+            #reset arrays
+            Reward_Data= np.zeros((sample_size,2))
+            Percent_Aligned_arr= np.zeros((4001,1))
+            Alignment_Data= np.zeros((sample_size,3))
+            Calc= np.zeros((sample_size,2))
+            count=0
+            index=0
                 
