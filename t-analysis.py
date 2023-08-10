@@ -31,7 +31,7 @@ Percent_Aligned_arr= np.zeros((81,2))
 ErrArr=np.zeros(100)
 index=0
 count=0
-gen=np.zeros((81,1))
+gen=np.zeros((81))
 
 for i in range(0,81):
  gen[i]=i*50
@@ -77,15 +77,19 @@ for g in range (0,4001,50):
         #Sum the aligned data and calculate percent aligned
         Sum_Aligned= Alignment_Data[:].sum() 
         ErrArr[x]= (Sum_Aligned/(index+1)) *100
-        print(ErrArr[x])
+
+        #reset arrays
+        Alignment_Data= np.zeros(numtraj) #To store the alignment calculations
+        Calc= np.zeros(numtraj)
+        count=0
+        index=0
 
     h=g//50
     Percent_Aligned_arr[h,0]=np.mean(ErrArr)
-    Percent_Aligned_arr[h,1]=(np.std(ErrArr, ddof=1) / np.sqrt(np.size(ErrArr)))
 
-    #print (Percent_Aligned_arr)
+y= Percent_Aligned_arr[:,0]
 
-plt.plot(gen, Percent_Aligned_arr[:,0], color='green', label = 'Agent' + ' ' + str(agent_idx))
+plt.plot(gen, y, color='green', label = 'Agent' + ' ' + str(agent_idx))
 
 plt.ylim([0,100])
 plt.xlim([0,4000])        
