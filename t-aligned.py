@@ -1,10 +1,10 @@
 from mtl import make_env
 
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib
 import torch
 import pickle
+from os import killpg
+import os
 
 import code.reward_2 as reward
 from teaming import logger
@@ -23,7 +23,6 @@ def load_data(n_agents=5,agent_idx=0,n_actors=4,iteration=0,generation=0,q=3,hid
     net=Net(hidden)
     net.model.load_state_dict(torch.load(fname+"/"+str(generation)+".mdl")[agent_idx])
     return env,pos,teams,net
-
 
 def evaltrajc(x,y,sin,cos,team_idx,agent_idx,env,position,teams,generation,time=-1):
     pos,rot=position[generation][team_idx][time]
@@ -66,8 +65,25 @@ def getcood(team_idx,agent_idx,env,position,teams,generation,time=-1):
 
     return x,y,sin,cos
 
+def save (agent_idx,g,bigG,lilg):
+    folder="T/"
+    if not os.path.exists("T"):
+        os.makedirs("T")
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    filepath = r"T/"+"Global" + str(agent_idx)+"-"+str(g)+'.pkl'
+    file=open(filepath, 'wb')
+    pickle.dump(bigG,file)
+    file.close
+                    
+    filepath = r"T/"+"Local"+str(agent_idx)+"-"+str(g)+'.pkl'
+    file=open(filepath, 'wb')
+    pickle.dump(lilg,file)
+    file.close
+
+
 #----------CODE------------#
-numtraj=(4*(4000))+4
+numtraj=(4*50)
 lilg=np.zeros((30,numtraj)) #Local Rewards of all trajectories
 bigG=np.zeros((30,numtraj)) #Global Rewards for all trajectories
 GlobRwrds=np.zeros(numtraj) #Max Global Rewards
@@ -93,11 +109,15 @@ if __name__=="__main__":
                 print (g)
                 if g%50==0:
                     env,pos,teams,net=load_data(n_agents=5,agent_idx=agent_idx,n_actors=4,iteration=0,generation=g)
+                    j=g
+                    save(agent_idx,g,bigG,lilg)
+
+
                 for i in range (0,30):
                     #Get Control Data
                     state1,G1= evaltraj(team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g1=net.feed(state1)[0,0]
-                    idx1=0+(g*4)
+                    idx1=0+((g-j)*4)
                     bigG[i,idx1]=G1
                     lilg[i,idx1]=g1
 
@@ -105,7 +125,7 @@ if __name__=="__main__":
                     x,y,sin,cos= getcood(team_idx2,agent_idx,env,pos,teams,generation=g,time=i)
                     state2,G2= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g2=net.feed(state2)[0,0]
-                    idx2=1+(g*4)
+                    idx2=1+((g-j)*4)
                     bigG[i,idx2]=G2
                     lilg[i,idx2]=g2
 
@@ -113,7 +133,7 @@ if __name__=="__main__":
                     x,y,sin,cos= getcood(team_idx3,agent_idx,env,pos,teams,generation=g,time=i)
                     state3,G3= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g3=net.feed(state3)[0,0]
-                    idx3=2+(g*4)
+                    idx3=2+((g-j)*4)
                     bigG[i,idx3]=G3
                     lilg[i,idx3]=g3
 
@@ -121,14 +141,9 @@ if __name__=="__main__":
                     x,y,sin,cos= getcood(team_idx4,agent_idx,env,pos,teams,generation=g,time=i)
                     state4,G4= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g4=net.feed(state4)[0,0]
-                    idx4=3+(g*4)
+                    idx4=3+((g-j)*4)
                     bigG[i,idx4]=G4
                     lilg[i,idx4]=g4
-                    
-file=open('TrajAnalysis1-' + str(agent_idx), 'wb')
-pickle.dump(bigG,file)
-file.close
 
-file=open('TrajAnalysis2-' + str(agent_idx), 'wb')
-pickle.dump(lilg,file)
-file.close
+                        
+

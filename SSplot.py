@@ -53,7 +53,5 @@ plt.xlabel("Generation")
 plt.ylabel("Percent Alignment")
 plt.title("Percent Alignment for Team " + str(team_idx))
 
-for i in range(0,4001,1):
- print (data1[i])
 
 plt.show()
