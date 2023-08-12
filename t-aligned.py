@@ -58,10 +58,11 @@ def evaltraj(team_idx,agent_idx,env,position,teams,generation,time=-1):
 
     return s,g
 
-def getcood(team_idx,agent_idx,env,position,teams,generation,time=-1):
+def getcood(team_idx,agent_idx,AgentPositionInTeam,position,teams,generation,time=-1):
     pos,rot=position[generation][team_idx][time]
-    [sin,cos]=rot[agent_idx,:]
-    [x,y]=pos[agent_idx,:]
+    j=AgentPositionInTeam[agent_idx,team_idx1]
+    [sin,cos]=rot[j,:]
+    [x,y]=pos[j,:]
 
     return x,y,sin,cos
 
@@ -94,14 +95,15 @@ index=0
 count=0
 
 ant=np.array ([[0,1,2,3],[0,1,2,4],[0,1,3,4],[0,2,3,4],[1,2,3,4]])
+AgentPositionInTeam=np.array([[0,0,0,0,9],[1,1,1,9,0],[2,2,9,1,1],[3,9,2,2,2],[9,3,3,3,3]])
 
 #for agent_idx in range (0,5):
-     #for cidx in range (0,4):
 agent_idx=0
 team_idx1= ant[agent_idx,0]
 team_idx2= ant[agent_idx,1]
 team_idx3= ant[agent_idx,2]
 team_idx4= ant[agent_idx,3]
+
 
 
 if __name__=="__main__":
@@ -122,7 +124,7 @@ if __name__=="__main__":
                     lilg[i,idx1]=g1
 
                     #Get Data for Team 2 in Control
-                    x,y,sin,cos= getcood(team_idx2,agent_idx,env,pos,teams,generation=g,time=i)
+                    x,y,sin,cos= getcood(team_idx2,agent_idx,AgentPositionInTeam,pos,teams,generation=g,time=-1)
                     state2,G2= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g2=net.feed(state2)[0,0]
                     idx2=1+((g-j)*4)
@@ -130,7 +132,7 @@ if __name__=="__main__":
                     lilg[i,idx2]=g2
 
                     #Get Data for Team 3 in Control
-                    x,y,sin,cos= getcood(team_idx3,agent_idx,env,pos,teams,generation=g,time=i)
+                    x,y,sin,cos= getcood(team_idx3,agent_idx,AgentPositionInTeam,pos,teams,generation=g,time=-1)
                     state3,G3= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g3=net.feed(state3)[0,0]
                     idx3=2+((g-j)*4)
@@ -138,12 +140,11 @@ if __name__=="__main__":
                     lilg[i,idx3]=g3
 
                     #Get Data for Team 4 in Control
-                    x,y,sin,cos= getcood(team_idx4,agent_idx,env,pos,teams,generation=g,time=i)
+                    x,y,sin,cos= getcood(team_idx4,agent_idx,AgentPositionInTeam,pos,teams,generation=g,time=-1)
                     state4,G4= evaltrajc(x,y,sin,cos,team_idx1,agent_idx,env,pos,teams,generation=g,time=i)
                     g4=net.feed(state4)[0,0]
                     idx4=3+((g-j)*4)
                     bigG[i,idx4]=G4
                     lilg[i,idx4]=g4
-
                         
 
